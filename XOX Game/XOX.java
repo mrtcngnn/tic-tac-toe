@@ -3,6 +3,8 @@ import java.awt.event.MouseEvent;
 import java.util.Scanner;
 import java.awt.Color;
 import java.awt.Graphics;
+
+import javax.naming.spi.DirStateFactory.Result;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,12 +32,12 @@ public class XOX extends JFrame implements MouseInputListener, Action{
     boolean checkY = true;
     boolean full = true;
 
-    JPanel board;
+    JFrame board;
 
     public XOX(){
         setTitle("X-O-X");
         setSize(800,800);
-        board = new JPanel();
+        board = new JFrame();
         for (int i=0;i<3;i++){
             for (int j=0;j<3;j++){
                 boardStatus[i][j] = "";
@@ -148,15 +150,19 @@ public class XOX extends JFrame implements MouseInputListener, Action{
             boardStatus[locX][locY] = symbol;
             String result = checkWinner(locX, locY, symbol);
             if (result.equals("X")){
+                this.dispose();
                 new WinnerWindow("X");
             }else if (result.equals("O")){
+                this.dispose();
                 new WinnerWindow("O");
             }
         round++;
         if (round == 10 && !(result.equals("X") || result.equals("O"))){
+            this.dispose();
             new WinnerWindow("");
         }
         }else{
+            this.dispose();
             new AlertWindow();
         }
     }
@@ -291,6 +297,7 @@ public class XOX extends JFrame implements MouseInputListener, Action{
 
     public class WinnerWindow extends JFrame implements Action{
 
+        
         public WinnerWindow(String winner){
             setTitle("Result!");
             setSize(400, 200);
@@ -312,14 +319,17 @@ public class XOX extends JFrame implements MouseInputListener, Action{
             tus.add(newGame);
             tus.add(exit);
             add(tus);
+            newGame.addActionListener(this);
             exit.addActionListener(this);
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             setVisible(true);
         }
 
         public void actionPerformed(ActionEvent e) {
            String command = e.getActionCommand();
-			if (command.contentEquals("New Game")) { //hatali
-                System.out.println("new");
+           System.out.println(command);
+			if (command.equals("New Game")) { //hatali
+                this.dispose();
                 new XOX();
 			}else if (command.contentEquals("Exit")){
                 System.exit(0);
