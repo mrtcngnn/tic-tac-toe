@@ -1,4 +1,5 @@
 # Tic-Tac-Toe
-## HOW TO RUN
+
+HOW TO RUN
 - Compile -> javac XOX.java
 - Run     -> java XOX.java
